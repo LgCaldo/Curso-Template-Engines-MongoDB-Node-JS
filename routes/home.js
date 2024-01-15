@@ -1,15 +1,22 @@
-const express = require("express")
-const router = express.Router()
+const express = require("express");
+const {
+  leerUrls,
+  agregarUrl,
+  eliminarUrl,
+  editarUrlForm,
+  editarUrl,
+  redireccionamiento,
+} = require("../controllers/homeControllers");
+const urlValidar = require("../middleware/urlValida");
+const verificarUser = require("../middleware/verificarUser");
 
-router.get("/", (req,res) => {
-    const urls = [
-        { origin: "www.google.com/1", shortURL: "dgkjkd1" },
-        { origin: "www.google.com/2", shortURL: "dgkjkd2" },
-        { origin: "www.google.com/3", shortURL: "dgkjkd3" },
-      ];
-      res.render("home", { urls: urls });
-})
+const router = express.Router();
 
+router.get("/", verificarUser, leerUrls);
+router.post("/", urlValidar, agregarUrl);
+router.get("/eliminar/:id", eliminarUrl);
+router.get("/editar/:id", editarUrlForm);
+router.post("/editar/:id", urlValidar, editarUrl )
+router.get("/:shortUrl", redireccionamiento)
 
-
-module.exports = router
+module.exports = router;
